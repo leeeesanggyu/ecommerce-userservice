@@ -3,6 +3,7 @@ package com.userservice.service;
 import com.userservice.domain.dto.UserDto;
 import com.userservice.domain.entity.UserEntity;
 import com.userservice.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -13,18 +14,12 @@ import java.util.UUID;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final BCryptPasswordEncoder bcrypt;
-
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bcrypt) {
-        this.userRepository = userRepository;
-        this.bcrypt = bcrypt;
-        this.modelMapper = new ModelMapper();
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-    }
 
     @Override
     public UserDto createUser(UserDto userDto) {

@@ -5,6 +5,7 @@ import com.userservice.domain.dto.UserDto;
 import com.userservice.domain.dto.UserReq;
 import com.userservice.domain.dto.UserRes;
 import com.userservice.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -15,19 +16,13 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/")
 public class UserController {
 
     private final Greeting greeting;
     private final UserService userService;
     private final ModelMapper modelMapper;
-
-    public UserController(Greeting greeting, UserService userService) {
-        this.greeting = greeting;
-        this.userService = userService;
-        this.modelMapper = new ModelMapper();
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-    }
 
     @GetMapping("/health_check")
     public String status() {
