@@ -39,7 +39,7 @@ public class UserController {
         return greeting.getMessage();
     }
 
-    @PostMapping("/users")
+    @PostMapping("/user")
     public ResponseEntity<UserRes> createUser(@Validated @RequestBody UserReq user) {
         final UserDto result = userService.createUser(modelMapper.map(user, UserDto.class));
         final UserRes userRes = modelMapper.map(result, UserRes.class);
