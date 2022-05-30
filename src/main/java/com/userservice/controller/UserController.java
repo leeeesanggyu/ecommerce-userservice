@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -24,12 +26,12 @@ public class UserController {
     private final UserService userService;
     private final ModelMapper modelMapper;
 
-    @GetMapping("/health_check")
-    public String status() {
-        return "It's working in user-service";
+    @GetMapping("/user-service/health_check")
+    public String status(HttpServletRequest request) {
+        return "It's working in user-service, port = " + request.getServerPort();
     }
 
-    @GetMapping("/welcome")
+    @GetMapping("/user-service/welcome")
     public String welcome() {
         return greeting.getMessage();
     }
