@@ -1,12 +1,10 @@
 package com.userservice.service;
 
 import com.userservice.domain.dto.UserDto;
-import com.userservice.domain.dto.UserRes;
 import com.userservice.domain.entity.UserEntity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
-import java.util.List;
-
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
     UserDto createUser(UserDto userDto);
     UserDto getUserByUserId(String userId);
