@@ -43,7 +43,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     ) throws AuthenticationException {
         try {
             final LoginReq creds = new ObjectMapper().readValue(request.getInputStream(), LoginReq.class);
-            log.info("input email, password = {}, {}", creds.getEmail(), creds.getPassword());
             UsernamePasswordAuthenticationToken token =
                     new UsernamePasswordAuthenticationToken(creds.getEmail(), creds.getPassword(), new ArrayList<>());
             return getAuthenticationManager().authenticate(token);
@@ -65,7 +64,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
         response.addHeader("token", token);
         response.addHeader("userId", userDetails.getUserId());
-        log.info("login success ! -> {}", username);
+        log.info("login success ! -> {}, {}", username, token);
     }
 
     private Date tokenExpiration() {
