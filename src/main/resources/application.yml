@@ -31,3 +31,10 @@ eureka:
 #token:
 #  expiration: 864000000 # 10 days
 #  secret: salgu
+
+# Spring Boot Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans
