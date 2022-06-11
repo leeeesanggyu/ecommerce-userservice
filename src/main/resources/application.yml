@@ -28,6 +28,6 @@ eureka:
     service-url:
       defaultZone: http://127.0.0.1:8761/eureka
 
-token:
-  expiration: 864000000 # 10 days
-  secret: salgu
+#token:
+#  expiration: 864000000 # 10 days
+#  secret: salgu

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -28,10 +29,15 @@ public class UserController {
     private final Greeting greeting;
     private final UserService userService;
     private final ModelMapper modelMapper;
+    private final Environment env;
 
     @GetMapping("/health_check")
     public String status(HttpServletRequest request) {
-        return "It's working in user-service, port = " + request.getServerPort();
+        return "It's working in user-service, " +
+                "\nlocal.server.port = " + env.getProperty("local.server.port") +
+                "\nserver.port = " + env.getProperty("server.port") +
+                "\nconfig token.secret = " + env.getProperty("token.secret") +
+                "\nconfig token.expiration = " + env.getProperty("token.expiration");
     }
 
     @GetMapping("/welcome")
