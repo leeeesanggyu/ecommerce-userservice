@@ -19,7 +19,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final Environment env;
 
-    private static final String IP_ADDRESS = "192.168.35.89";
+    private static final String IP_ADDRESS = "192.168.35.61";
 
     /**
      * 권한 관련 configure 메소드입니다.
