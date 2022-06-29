@@ -1,18 +1,14 @@
 package com.userservice.service;
 
+import com.userservice.client.OrderServiceClient;
 import com.userservice.domain.dto.OrderRes;
 import com.userservice.domain.dto.UserDto;
-import com.userservice.domain.dto.UserRes;
 import com.userservice.domain.entity.UserEntity;
 import com.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,7 +18,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -35,6 +30,7 @@ public class UserServiceImpl implements UserService{
     private final BCryptPasswordEncoder bcrypt;
     private final RestTemplate restTemplate;
     private final Environment env;
+    private final OrderServiceClient orderServiceClient;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -62,14 +58,15 @@ public class UserServiceImpl implements UserService{
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         final UserDto userDto = modelMapper.map(userEntity, UserDto.class);
 
-        final ResponseEntity<List<OrderRes>> orderResList = restTemplate.exchange(
-                String.format(env.getProperty("orderService.uri"), userId),
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<List<OrderRes>>() {}
-        );
+//        final ResponseEntity<List<OrderRes>> orderResList = restTemplate.exchange(
+//                String.format(env.getProperty("orderService.uri"), userId),
+//                HttpMethod.GET,
+//                null,
+//                new ParameterizedTypeReference<List<OrderRes>>() {}
+//        );
 
-        userDto.setOrders(orderResList.getBody());
+        List<OrderRes> orders = orderServiceClient.getOrders(userId);
+        userDto.setOrders(orders);
         return userDto;
     }
 
