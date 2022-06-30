@@ -59,19 +59,7 @@ public class UserServiceImpl implements UserService{
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         final UserDto userDto = modelMapper.map(userEntity, UserDto.class);
 
-//        final ResponseEntity<List<OrderRes>> orderResList = restTemplate.exchange(
-//                String.format(env.getProperty("orderService.uri"), userId),
-//                HttpMethod.GET,
-//                null,
-//                new ParameterizedTypeReference<List<OrderRes>>() {}
-//        );
-
-        List<OrderRes> orders = null;
-        try {
-            orders = orderServiceClient.getOrders(userId);
-        } catch (FeignException e) {
-            log.error("getOrders error", e);
-        }
+        List<OrderRes> orders = orderServiceClient.getOrders(userId);
         userDto.setOrders(orders);
         return userDto;
     }
