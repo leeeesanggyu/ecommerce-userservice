@@ -5,6 +5,7 @@ import com.userservice.domain.dto.OrderRes;
 import com.userservice.domain.dto.UserDto;
 import com.userservice.domain.entity.UserEntity;
 import com.userservice.repository.UserRepository;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -65,7 +66,12 @@ public class UserServiceImpl implements UserService{
 //                new ParameterizedTypeReference<List<OrderRes>>() {}
 //        );
 
-        List<OrderRes> orders = orderServiceClient.getOrders(userId);
+        List<OrderRes> orders = null;
+        try {
+            orders = orderServiceClient.getOrders(userId);
+        } catch (FeignException e) {
+            log.error("getOrders error", e);
+        }
         userDto.setOrders(orders);
         return userDto;
     }
