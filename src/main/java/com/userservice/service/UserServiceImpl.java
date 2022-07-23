@@ -9,6 +9,8 @@ import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,6 +34,7 @@ public class UserServiceImpl implements UserService{
     private final RestTemplate restTemplate;
     private final Environment env;
     private final OrderServiceClient orderServiceClient;
+    private final CircuitBreakerFactory circuitBreakerFactory;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -59,7 +62,16 @@ public class UserServiceImpl implements UserService{
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         final UserDto userDto = modelMapper.map(userEntity, UserDto.class);
 
-        List<OrderRes> orders = orderServiceClient.getOrders(userId);
+        /* Error Decoder */
+//        List<OrderRes> orders = orderServiceClient.getOrders(userId);
+
+        /* CircuitBreaker */
+        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
+        List<OrderRes> orders = circuitBreaker.run(
+                () -> orderServiceClient.getOrders(userId), // toRun
+                throwable -> new ArrayList<>() // fallback
+        );
+
         userDto.setOrders(orders);
         return userDto;
     }
