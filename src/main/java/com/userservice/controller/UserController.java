@@ -6,6 +6,7 @@ import com.userservice.domain.dto.UserReq;
 import com.userservice.domain.dto.UserRes;
 import com.userservice.domain.entity.UserEntity;
 import com.userservice.service.UserService;
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -32,6 +33,7 @@ public class UserController {
     private final Environment env;
 
     @GetMapping("/health_check")
+    @Timed(value="user.status", longTask=true)
     public String status(HttpServletRequest request) {
         return "It's working in user-service, " +
                 "\nlocal.server.port = " + env.getProperty("local.server.port") +
@@ -41,6 +43,7 @@ public class UserController {
     }
 
     @GetMapping("/welcome")
+    @Timed(value="user.welcome", longTask=true)
     public String welcome() {
         return greeting.getMessage();
     }
