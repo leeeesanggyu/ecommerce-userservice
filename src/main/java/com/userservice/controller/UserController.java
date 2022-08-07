@@ -33,7 +33,7 @@ public class UserController {
     private final Environment env;
 
     @GetMapping("/health_check")
-    @Timed(value="user.status", longTask=true)
+    @Timed(value="users.status", longTask=true)
     public String status(HttpServletRequest request) {
         return "It's working in user-service, " +
                 "\nlocal.server.port = " + env.getProperty("local.server.port") +
@@ -43,7 +43,7 @@ public class UserController {
     }
 
     @GetMapping("/welcome")
-    @Timed(value="user.welcome", longTask=true)
+    @Timed(value="users.welcome", longTask=true)
     public String welcome() {
         return greeting.getMessage();
     }
